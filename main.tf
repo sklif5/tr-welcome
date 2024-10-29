@@ -2,6 +2,16 @@ provider "azurerm" {
   features {}
 }
 
+terraform {
+  required_providers {
+    time = {
+      source  = "hashicorp/time"
+      version = "0.7.2"  # Make sure to use the version that match latest version
+    }
+  }
+}
+
+
 variable "location" {
   default = "East US"
 }
@@ -98,4 +108,11 @@ resource "azurerm_linux_virtual_machine" "vm-igork" {
 output "vm_public_ip" {
   value = azurerm_public_ip.pip-igork.ip_address
   description = "Public IP address of the VM"
+  depends_on = [ time_sleep.wait_for_ip ]
 }
+
+resource "time_sleep" "wait_for_ip" {
+  create_duration = "30s"  # Wait for 30 seconds
+}
+
+
