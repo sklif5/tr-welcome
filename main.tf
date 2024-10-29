@@ -112,7 +112,7 @@ output "vm_public_ip" {
 }
 
 resource "time_sleep" "wait_for_ip" {
-  create_duration = "30s"  # Wait for 30 seconds
+  create_duration = "100s"  # Wait for 30 seconds
 }
 
 
