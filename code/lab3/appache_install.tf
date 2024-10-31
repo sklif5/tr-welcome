@@ -11,7 +11,7 @@ resource "null_resource" "provision_apache" {
     inline = [
       "sudo apt update",
       "sudo apt install -y apache2",
-      "echo '<h1>Welcome to \"${data.azurerm_virtual_machine.vm-yanic.name}\" Web Server! This is the worst language ever. </h1>' | sudo tee /var/www/html/welcome.html",
+      "echo '<h1>Welcome to \"${azurerm_linux_virtual_machine.vm.name}\" Web Server! This is the worst language ever. </h1>' | sudo tee /var/www/html/welcome.html",
       "sudo systemctl start apache2",
       "sudo systemctl enable apache2"
     ]
@@ -29,11 +29,6 @@ resource "null_resource" "provision_apache" {
 # Updated Output for Server Information to use data source
 output "server_info" {
   value       = "Please browse: http://${data.azurerm_public_ip.example.ip_address}/welcome.html"
-  description = "Browse the above link"
-}
-
-output "yaniv" {
-  value       = "Yaniv machine: ${data.azurerm_virtual_machine.vm-yanic.power_state}"
   description = "Browse the above link"
 }
 
