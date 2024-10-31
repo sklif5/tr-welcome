@@ -20,6 +20,11 @@ variable "myname" {
   default = "igork"
 }
 
+variable "env_setting" {
+  type = string
+  description = "(optional) describe your variable"
+  default = "stage"
+}
 
 variable "vm_size" {
   default = "Standard_B1ms"
@@ -113,6 +118,9 @@ output "vm_public_ip" {
 
 
 resource "null_resource" "validate_ip" {
+  triggers = {
+    env_setting = "production"
+  }
   provisioner "local-exec" {
         command = <<EOT
       if [ -z "${azurerm_public_ip.pip-igork.ip_address}" ]; then
