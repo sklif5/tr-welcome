@@ -108,11 +108,24 @@ resource "azurerm_linux_virtual_machine" "vm-igork" {
 output "vm_public_ip" {
   value = azurerm_public_ip.pip-igork.ip_address
   description = "Public IP address of the VM"
-  depends_on = [ time_sleep.wait_for_ip ]
+  depends_on = [null_resource.validate_ip ]
+}
+
+
+resource "null_resource" "validate_ip" {
+  provisioner "local-exec" {
+        command = <<EOT
+      if [ -z "${azurerm_public_ip.pip-igork.ip_address}" ]; then
+        echo "ERROR: Public IP address was not assigned." >&2
+        exit 1
+      fi
+    EOT
+  }
+  depends_on = [ azurerm_public_ip.pip-igork, time_sleep.wait_for_ip ]
 }
 
 resource "time_sleep" "wait_for_ip" {
-  create_duration = "100s"  # Wait for 30 seconds
+  create_duration = "30s"  # Wait for 30 seconds
 }
 
 
